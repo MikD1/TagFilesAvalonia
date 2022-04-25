@@ -1,0 +1,46 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="using:TagFiles.Explorer.Views"
+        xmlns:avaloniaFixedWrapPanel="clr-namespace:AvaloniaFixedWrapPanel;assembly=AvaloniaFixedWrapPanel"
+        x:Class="TagFiles.Explorer.Views.MainWindow"
+        Icon="/Assets/avalonia-logo.ico"
+        Title="TagFiles"
+        Background="#222831"
+        ExtendClientAreaToDecorationsHint="True">
+    <Panel>
+        <Grid Margin="10,40,10,10" ColumnDefinitions="200,*" RowDefinitions="*,auto">
+            <Panel Grid.Column="0" Grid.Row="0">
+                <Button Command="{Binding LoadFilesCommand}">
+                    <TextBlock Text="Load" />
+                </Button>
+            </Panel>
+            <Panel Grid.Column="1" Grid.Row="0">
+                <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsLoading}" />
+                <ScrollViewer IsVisible="{Binding !IsLoading}">
+                    <ItemsControl Items="{Binding Files}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <avaloniaFixedWrapPanel:FixedWrapPanel ItemsPerLine="{Binding FilesInLine}" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <local:FileView Margin="5" />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Panel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0" Grid.Column="1"
+                        Grid.Row="1">
+                <Button Command="{Binding ScaleDownCommand}">
+                    <PathIcon Data="{StaticResource RemoveIcon}" />
+                </Button>
+                <Button Command="{Binding ScaleUpCommand}">
+                    <PathIcon Data="{StaticResource AddIcon}" />
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Panel>
+</Window>
