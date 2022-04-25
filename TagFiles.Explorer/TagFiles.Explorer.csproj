@@ -28,6 +28,8 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.4" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.4" />
         <PackageReference Include="MikD1.AvaloniaFixedWrapPanel" Version="0.0.2" />
+        <PackageReference Include="Xabe.FFmpeg" Version="5.1.0" />
+        <PackageReference Include="Xabe.FFmpeg.Downloader" Version="5.1.0" />
         <PackageReference Include="XamlNameReferenceGenerator" Version="1.3.4" />
     </ItemGroup>
 </Project>

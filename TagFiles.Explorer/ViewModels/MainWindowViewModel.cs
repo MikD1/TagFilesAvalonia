@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Avalonia.Controls;
+using Avalonia.Media.Imaging;
 using ReactiveUI;
 using TagFiles.Explorer.Models;
 using TagFiles.Explorer.Views;
@@ -68,19 +70,27 @@ namespace TagFiles.Explorer.ViewModels
 
         private async Task LoadFiles(string location)
         {
-            IsLoading = true;
-            FilesManager filesManager = new();
-            List<FileInfo> files = await filesManager.LoadFiles(location);
-
+            // IsLoading = true;
             Files.Clear();
-            files.ForEach(x => Files.Add(new FileViewModel(x.Name, x.Format, new List<string>(), null)));
-            IsLoading = false;
+            FilesManager filesManager = new();
+            await filesManager.LoadFiles(location, fileInfo =>
+            {
+                Files.Add(new FileViewModel(fileInfo.Name, fileInfo.Format, new List<string>(),
+                    CreateBitmap(fileInfo.Preview)));
+            });
+
+            // IsLoading = false;
         }
 
         private async Task<string?> RequestLocation()
         {
             OpenFolderDialog dialog = new();
             return await dialog.ShowAsync(MainWindow.Instance!);
+        }
+
+        private Bitmap? CreateBitmap(byte[]? bytes)
+        {
+            return bytes is null ? null : new Bitmap(new MemoryStream(bytes));
         }
 
         // private AppDbContext InitDatabase()

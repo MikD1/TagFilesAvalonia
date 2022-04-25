@@ -1,14 +1,19 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Xabe.FFmpeg;
+using Xabe.FFmpeg.Downloader;
 
 namespace TagFiles.Explorer.Models;
 
 public class FilesManager
 {
-    public async Task<List<FileInfo>> LoadFiles(string location)
+    public async Task LoadFiles(string location, Action<FileInfo> action)
     {
+        await FFmpegDownloader.GetLatestVersion(FFmpegVersion.Official);
+
         string[] filePaths = Directory.GetFiles(location);
         List<FileInfo> files = new();
         foreach (string filePath in filePaths)
@@ -39,10 +44,9 @@ public class FilesManager
             //         preview = new Bitmap(previewStream);
             //     }
             // }
-            files.Add(new FileInfo(filePath, filename, format, null));
+            byte[]? preview = await MakePreview(filePath);
+            action(new FileInfo(filePath, filename, format, preview));
         }
-
-        return files;
     }
 
     private async Task<FileFormat> GetFileFormat(Stream stream)
@@ -66,6 +70,35 @@ public class FilesManager
 
         stream.Seek(0, SeekOrigin.Begin);
         return format;
+    }
+
+    private async Task<byte[]?> MakePreview(string filePath)
+    {
+        try
+        {
+            IMediaInfo info = await FFmpeg.GetMediaInfo(filePath);
+            IVideoStream? videoStream = info.VideoStreams.First()?.SetCodec(VideoCodec.png);
+            if (videoStream is null)
+            {
+                return null;
+            }
+
+            videoStream = videoStream.SetSize(200, 150);
+
+            string previewFilename = Path.Combine(Directory.GetCurrentDirectory(), Guid.NewGuid() + ".png");
+            await FFmpeg.Conversions.New()
+                .AddStream(videoStream)
+                .ExtractNthFrame(0, _ => previewFilename)
+                .Start();
+
+            byte[] preview = await File.ReadAllBytesAsync(previewFilename);
+            File.Delete(previewFilename);
+            return preview;
+        }
+        catch (Exception)
+        {
+            return null;
+        }
     }
 
     private bool IsImage(FileFormat format)
