@@ -18,6 +18,16 @@ namespace TagFiles.Explorer.ViewModels
             IsLoading = false;
             FilesInLine = 5;
             Files = new ObservableCollection<FileViewModel>();
+
+            Tags = new ObservableCollection<Tag>();
+            Tags.Add(new Tag("tag1", 28));
+            Tags.Add(new Tag("a+b", 32));
+            Tags.Add(new Tag("image", 11));
+            Tags.Add(new Tag("media", 2));
+            Tags.Add(new Tag("some_long_tag_name", 98));
+            Tags.Add(new Tag("42", 34));
+            Tags.Add(new Tag("12m", 102));
+
             LoadFilesCommand = ReactiveCommand.CreateFromTask(async () =>
             {
                 string? location = await RequestLocation();
@@ -55,6 +65,8 @@ namespace TagFiles.Explorer.ViewModels
         }
 
         public ObservableCollection<FileViewModel> Files { get; }
+
+        public ObservableCollection<Tag> Tags { get; }
 
         public ICommand LoadFilesCommand { get; }
 

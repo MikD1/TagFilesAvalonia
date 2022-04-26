@@ -10,10 +10,9 @@
     <Panel>
         <Grid Margin="10,40,10,10" ColumnDefinitions="200,*" RowDefinitions="*,auto">
             <Panel Grid.Column="0" Grid.Row="0">
-                <Button Command="{Binding LoadFilesCommand}">
-                    <TextBlock Text="Load" />
-                </Button>
+                <local:TagsView />
             </Panel>
+
             <Panel Grid.Column="1" Grid.Row="0">
                 <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsLoading}" />
                 <ScrollViewer IsVisible="{Binding !IsLoading}">
@@ -31,6 +30,12 @@
                     </ItemsControl>
                 </ScrollViewer>
             </Panel>
+
+            <StackPanel Orientation="Horizontal" Margin="0,5,0,0" Grid.Column="0" Grid.Row="1">
+                <Button Command="{Binding LoadFilesCommand}">
+                    <PathIcon Data="{StaticResource FolderAdd}" />
+                </Button>
+            </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,5,0,0" Grid.Column="1"
                         Grid.Row="1">
