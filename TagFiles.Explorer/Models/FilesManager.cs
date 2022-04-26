@@ -15,7 +15,6 @@ public class FilesManager
         await FFmpegDownloader.GetLatestVersion(FFmpegVersion.Official);
 
         string[] filePaths = Directory.GetFiles(location);
-        List<FileInfo> files = new();
         foreach (string filePath in filePaths)
         {
             string filename = Path.GetFileName(filePath);
@@ -83,7 +82,7 @@ public class FilesManager
                 return null;
             }
 
-            videoStream = videoStream.SetSize(200, 150);
+            videoStream = SetPreviewSize(videoStream);
 
             string previewFilename = Path.Combine(Directory.GetCurrentDirectory(), Guid.NewGuid() + ".png");
             await FFmpeg.Conversions.New()
@@ -99,6 +98,38 @@ public class FilesManager
         {
             return null;
         }
+    }
+
+    private IVideoStream SetPreviewSize(IVideoStream stream)
+    {
+        double ratio;
+        string[] parts = stream.Ratio.Split(':');
+        if (parts.Length != 2)
+        {
+            ratio = 1.33;
+        }
+        else
+        {
+            double width = double.Parse(parts[0]);
+            double height = double.Parse(parts[1]);
+            ratio = width / height;
+        }
+
+        double previewWidth;
+        double previewHeight;
+        const double maxSize = 200;
+        if (ratio > 1)
+        {
+            previewWidth = maxSize;
+            previewHeight = maxSize / ratio;
+        }
+        else
+        {
+            previewHeight = maxSize;
+            previewWidth = maxSize * ratio;
+        }
+
+        return stream.SetSize((int)previewWidth, (int)previewHeight);
     }
 
     private bool IsImage(FileFormat format)
