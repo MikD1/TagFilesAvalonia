@@ -16,7 +16,7 @@ namespace TagFiles.Explorer.ViewModels
         public MainWindowViewModel()
         {
             IsLoading = false;
-            FilesInLine = 5;
+            FilesInLine = 10;
             Files = new ObservableCollection<FileViewModel>();
 
             Tags = new ObservableCollection<Tag>();
