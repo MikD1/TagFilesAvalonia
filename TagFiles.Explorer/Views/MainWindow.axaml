@@ -7,7 +7,6 @@
         Title="TagFiles"
         Background="#262626"
         ExtendClientAreaToDecorationsHint="True">
-
     <SplitView IsPaneOpen="True" DisplayMode="Inline" OpenPaneLength="230">
         <SplitView.Pane>
             <Panel Background="#323232">
@@ -15,29 +14,30 @@
                     <local:TagsView />
                     <StackPanel Orientation="Horizontal" Grid.Row="1">
                         <Button Command="{Binding LoadFilesCommand}">
-                            <PathIcon Data="{StaticResource FolderAdd}" />
+                            <PathIcon Data="{StaticResource FolderAddIcon}" />
                         </Button>
                     </StackPanel>
                 </Grid>
             </Panel>
         </SplitView.Pane>
-
+    
         <Grid RowDefinitions="*,auto" Margin="10,30,10,10">
             <!-- <ProgressBar IsIndeterminate="True" IsVisible="{Binding IsLoading}" /> -->
-            <ScrollViewer IsVisible="{Binding !IsLoading}">
-                <ItemsControl Items="{Binding Files}">
-                    <ItemsControl.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <avaloniaFixedWrapPanel:FixedWrapPanel ItemsPerLine="{Binding FilesInLine}" />
-                        </ItemsPanelTemplate>
-                    </ItemsControl.ItemsPanel>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <local:FileView Margin="10" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>
+            <!-- <ScrollViewer IsVisible="{Binding !IsLoading}"> -->
+            <!--     <ItemsControl Items="{Binding Files}"> -->
+            <!--         <ItemsControl.ItemsPanel> -->
+            <!--             <ItemsPanelTemplate> -->
+            <!--                 <avaloniaFixedWrapPanel:FixedWrapPanel ItemsPerLine="{Binding FilesInLine}" /> -->
+            <!--             </ItemsPanelTemplate> -->
+            <!--         </ItemsControl.ItemsPanel> -->
+            <!--         <ItemsControl.ItemTemplate> -->
+            <!--             <DataTemplate> -->
+            <!--                 <local:FileView Margin="10" /> -->
+            <!--             </DataTemplate> -->
+            <!--         </ItemsControl.ItemTemplate> -->
+            <!--     </ItemsControl> -->
+            <!-- </ScrollViewer> -->
+            <local:FilesView DataContext="{Binding FilesViewModel}" />
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0" Grid.Row="1">
                 <Button Command="{Binding ScaleDownCommand}">
                     <PathIcon Data="{StaticResource RemoveIcon}" />

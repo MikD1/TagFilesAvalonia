@@ -74,6 +74,8 @@ namespace TagFiles.Explorer.ViewModels
 
         public ICommand ScaleDownCommand { get; }
 
+        public FilesViewModel FilesViewModel { get; } = new(@"/Users/mik/Downloads");
+
         public int FilesInLine
         {
             get => _filesInLine;
