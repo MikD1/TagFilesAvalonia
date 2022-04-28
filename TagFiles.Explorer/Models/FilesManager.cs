@@ -132,13 +132,13 @@ public class FilesManager
         return stream.SetSize((int)previewWidth, (int)previewHeight);
     }
 
-    private bool IsImage(FileFormat format)
+    /*private bool IsImage(FileFormat format)
     {
         return format == FileFormat.Bmp ||
                format == FileFormat.Gif ||
                format == FileFormat.Jpeg ||
                format == FileFormat.Png;
-    }
+    }*/
 
     private readonly Dictionary<FileFormat, byte[]> _fileHeaders = new()
     {

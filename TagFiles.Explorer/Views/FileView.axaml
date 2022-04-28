@@ -3,7 +3,7 @@
              x:Class="TagFiles.Explorer.Views.FileView">
     <StackPanel Spacing="5">
         <Border CornerRadius="5" ClipToBounds="True">
-            <Panel Background="#EEEEEE">
+            <Panel Background="#4D535B">
                 <Image Stretch="Uniform" Source="{Binding Preview}" />
                 <Image Stretch="Uniform" Source="../Assets/file_image.png" MaxWidth="100" MaxHeight="100"
                        IsVisible="{Binding Preview, Converter={x:Static ObjectConverters.IsNull}}" />

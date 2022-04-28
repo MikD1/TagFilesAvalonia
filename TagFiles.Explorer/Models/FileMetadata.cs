@@ -14,6 +14,7 @@ public class FileMetadata
 
     public List<string> Tags { get; }
 
+    // ReSharper disable once UnusedMember.Local
     private FileMetadata()
     {
         Path = default!;
