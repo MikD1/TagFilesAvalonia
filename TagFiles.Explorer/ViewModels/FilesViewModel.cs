@@ -10,7 +10,10 @@ public class FilesViewModel : ViewModelBase
 {
     public FilesViewModel(string location)
     {
-        _location = location;
+        _location = default!;
+        _locationParts = default!;
+
+        Location = location;
         Nodes = new();
         LoadNodes();
     }
@@ -18,7 +21,17 @@ public class FilesViewModel : ViewModelBase
     public string Location
     {
         get => _location;
-        set => this.RaiseAndSetIfChanged(ref _location, value);
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _location, value);
+            LocationParts = value.Split(Path.DirectorySeparatorChar).Where(x => !string.IsNullOrEmpty(x)).ToArray();
+        }
+    }
+
+    public string[] LocationParts
+    {
+        get => _locationParts;
+        set => this.RaiseAndSetIfChanged(ref _locationParts, value);
     }
 
     public ObservableCollection<FileNodeViewModel> Nodes { get; }
@@ -84,5 +97,6 @@ public class FilesViewModel : ViewModelBase
     }
 
     private string _location;
+    private string[] _locationParts;
     private FileNodeViewModel? _selectedNode;
 }

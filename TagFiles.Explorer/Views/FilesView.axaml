@@ -2,8 +2,24 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="TagFiles.Explorer.Views.FilesView">
     <Grid RowDefinitions="auto,*">
-        <TextBlock Text="{Binding Location}" />
-        <ListBox Items="{Binding Nodes}" SelectedItem="{Binding SelectedNode}" Grid.Row="1">
+        <ItemsControl Items="{Binding LocationParts}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <Button Background="Transparent">
+                            <TextBlock Text="{Binding .}" />
+                        </Button>
+                        <PathIcon Data="{StaticResource ChevronRightIcon}" Height="12" />
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <ListBox Items="{Binding Nodes}" SelectedItem="{Binding SelectedNode}" Grid.Row="1" Margin="0,10,0,0">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">

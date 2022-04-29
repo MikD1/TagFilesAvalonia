@@ -37,7 +37,7 @@
             <!--         </ItemsControl.ItemTemplate> -->
             <!--     </ItemsControl> -->
             <!-- </ScrollViewer> -->
-            <local:FilesView DataContext="{Binding FilesViewModel}" />
+            <local:FilesView DataContext="{Binding FilesViewModel}" Margin="0,10,0,0" />
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0" Grid.Row="1">
                 <Button Command="{Binding ScaleDownCommand}">
                     <PathIcon Data="{StaticResource RemoveIcon}" />
