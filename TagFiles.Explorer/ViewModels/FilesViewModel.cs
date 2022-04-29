@@ -21,9 +21,9 @@ public class FilesViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _location, value);
     }
 
-    public ObservableCollection<FileNode> Nodes { get; }
+    public ObservableCollection<FileNodeViewModel> Nodes { get; }
 
-    public FileNode? SelectedNode
+    public FileNodeViewModel? SelectedNode
     {
         get => _selectedNode;
         set
@@ -36,9 +36,9 @@ public class FilesViewModel : ViewModelBase
         }
     }
 
-    public void SelectNode(FileNode node)
+    private void SelectNode(FileNodeViewModel node)
     {
-        if (node.IsDirectory)
+        if (node.Type.IsDirectory || node.Type.IsUpLink)
         {
             Location = node.Path;
             LoadNodes();
@@ -54,8 +54,8 @@ public class FilesViewModel : ViewModelBase
         string[] files = Directory.GetFiles(_location);
 
         AddParentIfExists();
-        AddNodes(directories, true);
-        AddNodes(files, false);
+        AddNodes(directories, FileNodeType.Directory);
+        AddNodes(files, FileNodeType.File);
     }
 
     private void AddParentIfExists()
@@ -63,11 +63,12 @@ public class FilesViewModel : ViewModelBase
         string? parent = Directory.GetParent(_location)?.FullName;
         if (parent != null)
         {
-            Nodes.Add(new FileNode(parent, "..", true));
+            FileNode node = new(parent, string.Empty, FileNodeType.UpLink);
+            Nodes.Add(new FileNodeViewModel(node));
         }
     }
 
-    private void AddNodes(string[] items, bool isDirectory)
+    private void AddNodes(string[] items, FileNodeType type)
     {
         foreach (string item in items.OrderBy(x => x))
         {
@@ -77,10 +78,11 @@ public class FilesViewModel : ViewModelBase
                 continue;
             }
 
-            Nodes.Add(new FileNode(item, name, isDirectory));
+            FileNode node = new(item, name, type);
+            Nodes.Add(new FileNodeViewModel(node));
         }
     }
 
     private string _location;
-    private FileNode? _selectedNode;
+    private FileNodeViewModel? _selectedNode;
 }

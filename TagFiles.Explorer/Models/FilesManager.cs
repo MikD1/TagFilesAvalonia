@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Xabe.FFmpeg;
 using Xabe.FFmpeg.Downloader;
 
 namespace TagFiles.Explorer.Models;
@@ -73,63 +72,8 @@ public class FilesManager
 
     private async Task<byte[]?> MakePreview(string filePath)
     {
-        try
-        {
-            IMediaInfo info = await FFmpeg.GetMediaInfo(filePath);
-            IVideoStream? videoStream = info.VideoStreams.First()?.SetCodec(VideoCodec.png);
-            if (videoStream is null)
-            {
-                return null;
-            }
-
-            videoStream = SetPreviewSize(videoStream);
-
-            string previewFilename = Path.Combine(Directory.GetCurrentDirectory(), Guid.NewGuid() + ".png");
-            await FFmpeg.Conversions.New()
-                .AddStream(videoStream)
-                .ExtractNthFrame(0, _ => previewFilename)
-                .Start();
-
-            byte[] preview = await File.ReadAllBytesAsync(previewFilename);
-            File.Delete(previewFilename);
-            return preview;
-        }
-        catch (Exception)
-        {
-            return null;
-        }
-    }
-
-    private IVideoStream SetPreviewSize(IVideoStream stream)
-    {
-        double ratio;
-        string[] parts = stream.Ratio.Split(':');
-        if (parts.Length != 2)
-        {
-            ratio = 1.33;
-        }
-        else
-        {
-            double width = double.Parse(parts[0]);
-            double height = double.Parse(parts[1]);
-            ratio = width / height;
-        }
-
-        double previewWidth;
-        double previewHeight;
-        const double maxSize = 200;
-        if (ratio > 1)
-        {
-            previewWidth = maxSize;
-            previewHeight = maxSize / ratio;
-        }
-        else
-        {
-            previewHeight = maxSize;
-            previewWidth = maxSize * ratio;
-        }
-
-        return stream.SetSize((int)previewWidth, (int)previewHeight);
+        FilePreviewGenerator generator = new FilePreviewGenerator();
+        return await generator.GeneratePreview(filePath);
     }
 
     /*private bool IsImage(FileFormat format)

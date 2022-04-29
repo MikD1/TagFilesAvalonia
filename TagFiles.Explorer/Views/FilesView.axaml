@@ -7,8 +7,13 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <PathIcon Data="{StaticResource FolderIcon}" IsVisible="{Binding IsDirectory}" />
-                        <PathIcon Data="{StaticResource FileIcon}" IsVisible="{Binding !IsDirectory}"/>
+                        <Panel IsVisible="{Binding Preview, Converter={x:Static ObjectConverters.IsNull}}">
+                            <TextBlock Text=".." FontSize="28" IsVisible="{Binding Type.IsUpLink}" />
+                            <PathIcon Data="{StaticResource FolderIcon}" IsVisible="{Binding Type.IsDirectory}" />
+                            <PathIcon Data="{StaticResource FileIcon}" IsVisible="{Binding Type.IsFile}" />
+                        </Panel>
+                        <Image Stretch="Uniform" Source="{Binding Preview}" Height="30"
+                               IsVisible="{Binding Preview, Converter={x:Static ObjectConverters.IsNotNull}}" />
                         <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="15,0,0,0" />
                     </StackPanel>
                 </DataTemplate>
