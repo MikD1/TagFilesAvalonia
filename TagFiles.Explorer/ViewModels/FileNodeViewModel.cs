@@ -15,7 +15,7 @@ public class FileNodeViewModel : ViewModelBase
 
         if (Type.IsFile)
         {
-            LoadPreview();
+            // LoadPreview();
         }
     }
 

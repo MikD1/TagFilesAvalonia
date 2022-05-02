@@ -2,12 +2,37 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="TagFiles.Explorer.Views.FilesView">
     <Grid RowDefinitions="40,*,40">
-        <ContentControl Grid.Row="1" Content="{Binding Content}" />
+        <Grid Grid.Row="1" RowDefinitions="34,*">
+            <StackPanel Orientation="Horizontal">
+                <Button Command="{Binding LocationUp}" Background="Transparent">
+                    <PathIcon Data="{StaticResource UpIcon}" Height="15" />
+                </Button>
+                <ItemsControl Items="{Binding LocationParts}" Margin="20,0,0,0">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Button Background="Transparent">
+                                    <TextBlock Text="{Binding .}" />
+                                </Button>
+                                <PathIcon Data="{StaticResource ChevronRightIcon}" Height="12" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+
+            <ContentControl Grid.Row="1" Content="{Binding Content}" Margin="0,6,0,0" />
+        </Grid>
 
         <Panel Grid.Row="2" Margin="0,10,0,0">
             <StackPanel Orientation="Horizontal">
                 <Button Command="{Binding SelectListMode}">
-                    <PathIcon Data="{StaticResource LstIcon}" />
+                    <PathIcon Data="{StaticResource ListIcon}" />
                 </Button>
                 <Button Command="{Binding SelectIconsMode}">
                     <PathIcon Data="{StaticResource IconsIcon}" />

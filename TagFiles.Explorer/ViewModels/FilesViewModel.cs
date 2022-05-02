@@ -1,12 +1,19 @@
+using System.IO;
+using System.Linq;
 using ReactiveUI;
 
 namespace TagFiles.Explorer.ViewModels;
 
 public class FilesViewModel : ViewModelBase
 {
-    public FilesViewModel()
+    public FilesViewModel(string location)
     {
-        _content = new FilesListViewModel();
+        _location = default!;
+        _locationParts = default!;
+        _content = default!;
+
+        SetLocation(location);
+        SelectListMode();
     }
 
     public ViewModelBase Content
@@ -15,9 +22,15 @@ public class FilesViewModel : ViewModelBase
         private set => this.RaiseAndSetIfChanged(ref _content, value);
     }
 
+    public string[] LocationParts
+    {
+        get => _locationParts;
+        private set => this.RaiseAndSetIfChanged(ref _locationParts, value);
+    }
+
     public void SelectListMode()
     {
-        Content = new FilesListViewModel();
+        Content = new FilesListViewModel(_location, SetLocation);
     }
 
     public void SelectIconsMode()
@@ -25,6 +38,19 @@ public class FilesViewModel : ViewModelBase
         Content = new FilesIconsViewModel();
     }
 
+    public void LocationUp()
+    {
+    }
+
+    private void SetLocation(string location)
+    {
+        _location = location;
+        LocationParts = location.Split(Path.DirectorySeparatorChar).Where(x => !string.IsNullOrEmpty(x)).ToArray();
+        SelectListMode(); // TODO: Select current mode
+    }
+
+    private string _location;
+    private string[] _locationParts;
     private ViewModelBase _content;
 
     // ScaleUpCommand = ReactiveCommand.Create(() =>

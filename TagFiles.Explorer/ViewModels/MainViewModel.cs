@@ -4,11 +4,8 @@ public class MainViewModel : ViewModelBase
 {
     public MainViewModel(string location)
     {
-        _location = location;
-        Files = new FilesViewModel();
+        Files = new FilesViewModel(location);
     }
 
     public FilesViewModel Files { get; }
-
-    private string _location;
 }
