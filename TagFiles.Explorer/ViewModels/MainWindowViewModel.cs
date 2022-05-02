@@ -1,10 +1,6 @@
-﻿using System.Collections.ObjectModel;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Avalonia.Controls;
+﻿using System;
+using DynamicData.Binding;
 using ReactiveUI;
-using TagFiles.Explorer.Models;
-using TagFiles.Explorer.Views;
 
 namespace TagFiles.Explorer.ViewModels
 {
@@ -12,83 +8,36 @@ namespace TagFiles.Explorer.ViewModels
     {
         public MainWindowViewModel()
         {
-            IsLoading = false;
-            FilesInLine = 10;
+            _content = CreateOpenFolderViewModel();
+        }
 
-            Tags = new ObservableCollection<Tag>();
-            Tags.Add(new Tag("tag1", 28));
-            Tags.Add(new Tag("a+b", 32));
-            Tags.Add(new Tag("image", 11));
-            Tags.Add(new Tag("media", 2));
-            Tags.Add(new Tag("some_long_tag_name", 98));
-            Tags.Add(new Tag("42", 34));
-            Tags.Add(new Tag("12m", 102));
+        public ViewModelBase Content
+        {
+            get => _content;
+            private set => this.RaiseAndSetIfChanged(ref _content, value);
+        }
 
-            LoadFilesCommand = ReactiveCommand.CreateFromTask(async () =>
-            {
-                string? location = await RequestLocation();
-            });
-            ScaleUpCommand = ReactiveCommand.Create(() =>
-            {
-                int value = FilesInLine - 1;
-                if (value < 1)
+        private OpenFolderViewModel CreateOpenFolderViewModel()
+        {
+            OpenFolderViewModel viewModel = new OpenFolderViewModel();
+            viewModel
+                .WhenPropertyChanged(x => x.Folder)
+                .Subscribe(property =>
                 {
-                    value = 1;
-                }
+                    if (!string.IsNullOrEmpty(property.Value))
+                    {
+                        Content = CreateMainViewModel(property.Value);
+                    }
+                });
 
-                FilesInLine = value;
-            });
-            ScaleDownCommand = ReactiveCommand.Create(() =>
-            {
-                int value = FilesInLine + 1;
-                if (value > 12)
-                {
-                    value = 12;
-                }
-
-                FilesInLine = value;
-            });
+            return viewModel;
         }
 
-        public bool IsLoading
+        private MainViewModel CreateMainViewModel(string location)
         {
-            get => _isLoading;
-            set => this.RaiseAndSetIfChanged(ref _isLoading, value);
+            return new MainViewModel(location);
         }
 
-        public ObservableCollection<Tag> Tags { get; }
-
-        public ICommand LoadFilesCommand { get; }
-
-        public ICommand ScaleUpCommand { get; }
-
-        public ICommand ScaleDownCommand { get; }
-
-        public FilesViewModel FilesViewModel { get; } = new(@"/Users/mik/Downloads/test");
-
-        public int FilesInLine
-        {
-            get => _filesInLine;
-            set => this.RaiseAndSetIfChanged(ref _filesInLine, value);
-        }
-
-        private async Task<string?> RequestLocation()
-        {
-            OpenFolderDialog dialog = new();
-            return await dialog.ShowAsync(MainWindow.Instance!);
-        }
-
-        // private AppDbContext InitDatabase()
-        // {
-        //     string dbPath = System.IO.Path.Join(_location, "tagfiles.db");
-        //     DbContextOptions<AppDbContext> options = new DbContextOptionsBuilder<AppDbContext>()
-        //         .UseSqlite($"Data Source={dbPath}")
-        //         .Options;
-        //     AppDbContext dbContext = new AppDbContext(options);
-        //     dbContext.Database.EnsureCreated();
-        //     return dbContext;
-        // }
-        private bool _isLoading;
-        private int _filesInLine;
+        private ViewModelBase _content;
     }
 }

@@ -1,102 +1,50 @@
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
 using ReactiveUI;
-using TagFiles.Explorer.Models;
 
 namespace TagFiles.Explorer.ViewModels;
 
 public class FilesViewModel : ViewModelBase
 {
-    public FilesViewModel(string location)
+    public FilesViewModel()
     {
-        _location = default!;
-        _locationParts = default!;
-
-        Location = location;
-        Nodes = new();
-        LoadNodes();
+        _content = new FilesListViewModel();
     }
 
-    public string Location
+    public ViewModelBase Content
     {
-        get => _location;
-        set
-        {
-            this.RaiseAndSetIfChanged(ref _location, value);
-            LocationParts = value.Split(Path.DirectorySeparatorChar).Where(x => !string.IsNullOrEmpty(x)).ToArray();
-        }
+        get => _content;
+        private set => this.RaiseAndSetIfChanged(ref _content, value);
     }
 
-    public string[] LocationParts
+    public void SelectListMode()
     {
-        get => _locationParts;
-        set => this.RaiseAndSetIfChanged(ref _locationParts, value);
+        Content = new FilesListViewModel();
     }
 
-    public ObservableCollection<FileNodeViewModel> Nodes { get; }
-
-    public FileNodeViewModel? SelectedNode
+    public void SelectIconsMode()
     {
-        get => _selectedNode;
-        set
-        {
-            this.RaiseAndSetIfChanged(ref _selectedNode, value);
-            if (value is not null)
-            {
-                SelectNode(value);
-            }
-        }
+        Content = new FilesIconsViewModel();
     }
 
-    private void SelectNode(FileNodeViewModel node)
-    {
-        if (node.Type.IsDirectory || node.Type.IsUpLink)
-        {
-            Location = node.Path;
-            LoadNodes();
-        }
-    }
+    private ViewModelBase _content;
 
-    private void LoadNodes()
-    {
-        Nodes.Clear();
-        SelectedNode = null;
-
-        string[] directories = Directory.GetDirectories(_location);
-        string[] files = Directory.GetFiles(_location);
-
-        AddParentIfExists();
-        AddNodes(directories, FileNodeType.Directory);
-        AddNodes(files, FileNodeType.File);
-    }
-
-    private void AddParentIfExists()
-    {
-        string? parent = Directory.GetParent(_location)?.FullName;
-        if (parent != null)
-        {
-            FileNode node = new(parent, string.Empty, FileNodeType.UpLink);
-            Nodes.Add(new FileNodeViewModel(node));
-        }
-    }
-
-    private void AddNodes(string[] items, FileNodeType type)
-    {
-        foreach (string item in items.OrderBy(x => x))
-        {
-            string name = Path.GetFileName(item);
-            if (name.StartsWith('.'))
-            {
-                continue;
-            }
-
-            FileNode node = new(item, name, type);
-            Nodes.Add(new FileNodeViewModel(node));
-        }
-    }
-
-    private string _location;
-    private string[] _locationParts;
-    private FileNodeViewModel? _selectedNode;
+    // ScaleUpCommand = ReactiveCommand.Create(() =>
+    //     {
+    //         int value = FilesInLine - 1;
+    //         if (value < 1)
+    //         {
+    //             value = 1;
+    //         }
+    //
+    //         FilesInLine = value;
+    //     });
+    // ScaleDownCommand = ReactiveCommand.Create(() =>
+    // {
+    //     int value = FilesInLine + 1;
+    //     if (value > 12)
+    //     {
+    //         value = 12;
+    //     }
+    //
+    //     FilesInLine = value;
+    // });
 }

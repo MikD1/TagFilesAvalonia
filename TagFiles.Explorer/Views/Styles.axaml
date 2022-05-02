@@ -1,0 +1,9 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style Selector="Button.primary">
+        <Setter Property="Background" Value="#0065A0" />
+    </Style>
+    <Style Selector="Button:pointerover.primary">
+        <Setter Property="Background" Value="#0078C0" />
+    </Style>
+</Styles>

@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="TagFiles.Explorer.Views.FilesListView">
+    <Grid RowDefinitions="auto,*">
+        <TextBlock Text="Files List View" />
+        <!-- <ItemsControl Items="{Binding LocationParts}"> -->
+        <!--     <ItemsControl.ItemsPanel> -->
+        <!--         <ItemsPanelTemplate> -->
+        <!--             <WrapPanel /> -->
+        <!--         </ItemsPanelTemplate> -->
+        <!--     </ItemsControl.ItemsPanel> -->
+        <!--     <ItemsControl.ItemTemplate> -->
+        <!--         <DataTemplate> -->
+        <!--             <StackPanel Orientation="Horizontal"> -->
+        <!--                 <Button Background="Transparent"> -->
+        <!--                     <TextBlock Text="{Binding .}" /> -->
+        <!--                 </Button> -->
+        <!--                 <PathIcon Data="{StaticResource ChevronRightIcon}" Height="12" /> -->
+        <!--             </StackPanel> -->
+        <!--         </DataTemplate> -->
+        <!--     </ItemsControl.ItemTemplate> -->
+        <!-- </ItemsControl> -->
+
+        <!-- <ListBox Items="{Binding Nodes}" SelectedItem="{Binding SelectedNode}" Grid.Row="1" Margin="0,10,0,0"> -->
+        <!--     <ListBox.ItemTemplate> -->
+        <!--         <DataTemplate> -->
+        <!--             <StackPanel Orientation="Horizontal"> -->
+        <!--                 <Panel IsVisible="{Binding Preview, Converter={x:Static ObjectConverters.IsNull}}"> -->
+        <!--                     <TextBlock Text=".." FontSize="28" Margin="0,-10,0,0" IsVisible="{Binding Type.IsUpLink}" /> -->
+        <!--                     <PathIcon Data="{StaticResource FolderIcon}" IsVisible="{Binding Type.IsDirectory}" /> -->
+        <!--                     <PathIcon Data="{StaticResource FileIcon}" IsVisible="{Binding Type.IsFile}" /> -->
+        <!--                 </Panel> -->
+        <!--                 <Image Stretch="Uniform" Source="{Binding Preview}" Height="30" MaxWidth="50" -->
+        <!--                        IsVisible="{Binding Preview, Converter={x:Static ObjectConverters.IsNotNull}}" /> -->
+        <!--                 <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="15,0,0,0" /> -->
+        <!--             </StackPanel> -->
+        <!--         </DataTemplate> -->
+        <!--     </ListBox.ItemTemplate> -->
+        <!-- </ListBox> -->
+    </Grid>
+</UserControl>

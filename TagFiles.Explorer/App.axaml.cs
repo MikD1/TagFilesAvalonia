@@ -20,11 +20,22 @@ namespace TagFiles.Explorer
             {
                 desktop.MainWindow = new MainWindow
                 {
-                    DataContext = new MainWindowViewModel(),
+                    DataContext = new MainWindowViewModel()
                 };
             }
 
             base.OnFrameworkInitializationCompleted();
         }
+
+        // private AppDbContext InitDatabase()
+        // {
+        //     string dbPath = System.IO.Path.Join(_location, "tagfiles.db");
+        //     DbContextOptions<AppDbContext> options = new DbContextOptionsBuilder<AppDbContext>()
+        //         .UseSqlite($"Data Source={dbPath}")
+        //         .Options;
+        //     AppDbContext dbContext = new AppDbContext(options);
+        //     dbContext.Database.EnsureCreated();
+        //     return dbContext;
+        // }
     }
 }

@@ -1,0 +1,9 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="TagFiles.Explorer.Views.OpenFolderView">
+    <Panel HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Button Command="{Binding OpenFolder}">
+            <TextBlock Text="Open Folder" Margin="80,10" />
+        </Button>
+    </Panel>
+</UserControl>

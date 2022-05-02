@@ -1,0 +1,14 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:views="clr-namespace:TagFiles.Explorer.Views"
+             x:Class="TagFiles.Explorer.Views.MainView">
+    <Grid ColumnDefinitions="230,*">
+        <Grid Grid.Column="0" RowDefinitions="40,*,40" Background="#252525">
+            <views:TagsSearchView Grid.Row="1" Margin="10,0" />
+        </Grid>
+
+        <Panel Grid.Column="1">
+            <ContentControl Content="{Binding Files}" Margin="10,0,10,10" />
+        </Panel>
+    </Grid>
+</UserControl>

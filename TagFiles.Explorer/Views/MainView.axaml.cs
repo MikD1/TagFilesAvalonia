@@ -3,9 +3,10 @@ using Avalonia.Markup.Xaml;
 
 namespace TagFiles.Explorer.Views;
 
-public partial class TagsView : UserControl
+// ReSharper disable once PartialTypeWithSinglePart
+public partial class MainView : UserControl
 {
-    public TagsView()
+    public MainView()
     {
         InitializeComponent();
     }
