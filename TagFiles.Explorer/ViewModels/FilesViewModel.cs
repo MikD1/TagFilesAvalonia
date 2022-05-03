@@ -28,6 +28,12 @@ public class FilesViewModel : ViewModelBase
         private set => this.RaiseAndSetIfChanged(ref _locationParts, value);
     }
 
+    public bool CanNavigateUp
+    {
+        get => _canNavigateUp;
+        private set => this.RaiseAndSetIfChanged(ref _canNavigateUp, value);
+    }
+
     public void SelectListMode()
     {
         Content = new FilesListViewModel(_location, SetLocation);
@@ -38,19 +44,34 @@ public class FilesViewModel : ViewModelBase
         Content = new FilesIconsViewModel();
     }
 
-    public void LocationUp()
+    public void NavigateUp()
     {
+        string? parent = GetParentLocation(_location);
+        if (!string.IsNullOrEmpty(parent))
+        {
+            SetLocation(parent);
+        }
     }
 
     private void SetLocation(string location)
     {
         _location = location;
         LocationParts = location.Split(Path.DirectorySeparatorChar).Where(x => !string.IsNullOrEmpty(x)).ToArray();
+
+        string? parent = GetParentLocation(location);
+        CanNavigateUp = parent != null;
         SelectListMode(); // TODO: Select current mode
+    }
+
+    private string? GetParentLocation(string location)
+    {
+        string? parent = Directory.GetParent(location)?.FullName;
+        return parent;
     }
 
     private string _location;
     private string[] _locationParts;
+    private bool _canNavigateUp;
     private ViewModelBase _content;
 
     // ScaleUpCommand = ReactiveCommand.Create(() =>

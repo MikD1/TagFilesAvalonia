@@ -7,7 +7,6 @@
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <Panel IsVisible="{Binding Preview, Converter={x:Static ObjectConverters.IsNull}}">
-                            <TextBlock Text=".." FontSize="28" Margin="0,-10,0,0" IsVisible="{Binding Type.IsUpLink}" />
                             <PathIcon Data="{StaticResource FolderIcon}" IsVisible="{Binding Type.IsDirectory}" />
                             <PathIcon Data="{StaticResource FileIcon}" IsVisible="{Binding Type.IsFile}" />
                         </Panel>

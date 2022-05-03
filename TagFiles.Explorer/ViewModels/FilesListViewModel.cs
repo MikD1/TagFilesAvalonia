@@ -33,7 +33,7 @@ public class FilesListViewModel : ViewModelBase
 
     private void SelectNode(FileNodeViewModel node)
     {
-        if (node.Type.IsDirectory || node.Type.IsUpLink)
+        if (node.Type.IsDirectory)
         {
             _locationChanged(node.Path);
         }
@@ -47,19 +47,8 @@ public class FilesListViewModel : ViewModelBase
         string[] directories = Directory.GetDirectories(location);
         string[] files = Directory.GetFiles(location);
 
-        AddParentIfExists(location);
         AddNodes(directories, FileNodeType.Directory);
         AddNodes(files, FileNodeType.File);
-    }
-
-    private void AddParentIfExists(string location)
-    {
-        string? parent = Directory.GetParent(location)?.FullName;
-        if (parent != null)
-        {
-            FileNode node = new(parent, string.Empty, FileNodeType.UpLink);
-            Nodes.Add(new FileNodeViewModel(node));
-        }
     }
 
     private void AddNodes(string[] items, FileNodeType type)
