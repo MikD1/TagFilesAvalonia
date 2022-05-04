@@ -1,23 +1,44 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:avaloniaFixedWrapPanel="clr-namespace:AvaloniaFixedWrapPanel;assembly=AvaloniaFixedWrapPanel"
-             xmlns:views="clr-namespace:TagFiles.Explorer.Views"
              x:Class="TagFiles.Explorer.Views.FilesIconsView">
     <Panel>
-        <TextBlock Text="Files Icons View" />
-        <!-- <ScrollViewer> -->
-        <!--     <ItemsControl Items="{Binding Files}"> -->
-        <!--         <ItemsControl.ItemsPanel> -->
-        <!--             <ItemsPanelTemplate> -->
-        <!--                 <avaloniaFixedWrapPanel:FixedWrapPanel ItemsPerLine="{Binding FilesInLine}" /> -->
-        <!--             </ItemsPanelTemplate> -->
-        <!--         </ItemsControl.ItemsPanel> -->
-        <!--         <ItemsControl.ItemTemplate> -->
-        <!--             <DataTemplate> -->
-        <!--                 <views:FileView Margin="10" /> -->
-        <!--             </DataTemplate> -->
-        <!--         </ItemsControl.ItemTemplate> -->
-        <!--     </ItemsControl> -->
-        <!-- </ScrollViewer> -->
+        <ScrollViewer>
+            <ItemsControl Items="{Binding Nodes}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="10">
+                            <Border Background="#252525" CornerRadius="5" ClipToBounds="True">
+                                <Panel>
+                                    <Image Stretch="Uniform" Source="{Binding Preview}" />
+                                    <PathIcon Data="{StaticResource FolderIcon}" IsVisible="{Binding Type.IsDirectory}" />
+                                    <PathIcon Data="{StaticResource FileIcon}" IsVisible="{Binding Type.IsFile}" />
+                                    <!-- <ItemsControl VerticalAlignment="Bottom" Items="{Binding Tags}"> -->
+                                    <!--     <ItemsControl.ItemsPanel> -->
+                                    <!--         <ItemsPanelTemplate> -->
+                                    <!--             <WrapPanel /> -->
+                                    <!--         </ItemsPanelTemplate> -->
+                                    <!--     </ItemsControl.ItemsPanel> -->
+                                    <!--     <ItemsControl.ItemTemplate> -->
+                                    <!--         <DataTemplate> -->
+                                    <!--             <Border CornerRadius="30" ClipToBounds="True" Background="#393E46" -->
+                                    <!--                     Margin="2"> -->
+                                    <!--                 <TextBlock Text="{Binding}" FontSize="12" Padding="8 3" /> -->
+                                    <!--             </Border> -->
+                                    <!--         </DataTemplate> -->
+                                    <!--     </ItemsControl.ItemTemplate> -->
+                                    <!-- </ItemsControl> -->
+                                </Panel>
+                            </Border>
+                            <TextBlock Text="{Binding Name}" HorizontalAlignment="Center" FontSize="12" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </Panel>
 </UserControl>

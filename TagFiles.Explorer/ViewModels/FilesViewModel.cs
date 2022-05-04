@@ -1,6 +1,8 @@
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using ReactiveUI;
+using TagFiles.Explorer.Models;
 
 namespace TagFiles.Explorer.ViewModels;
 
@@ -8,18 +10,33 @@ public class FilesViewModel : ViewModelBase
 {
     public FilesViewModel(string location)
     {
+        _viewMode = FilesViewMode.CreateList();
         _location = default!;
         _locationParts = default!;
-        _content = default!;
+        Nodes = new();
 
         SetLocation(location);
-        SelectListMode();
     }
 
-    public ViewModelBase Content
+    public FilesViewMode ViewMode
     {
-        get => _content;
-        private set => this.RaiseAndSetIfChanged(ref _content, value);
+        get => _viewMode;
+        private set => this.RaiseAndSetIfChanged(ref _viewMode, value);
+    }
+
+    public ObservableCollection<FileNodeViewModel> Nodes { get; }
+
+    public FileNodeViewModel? SelectedNode
+    {
+        get => _selectedNode;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _selectedNode, value);
+            if (value is not null)
+            {
+                SelectNode(value);
+            }
+        }
     }
 
     public string[] LocationParts
@@ -36,12 +53,12 @@ public class FilesViewModel : ViewModelBase
 
     public void SelectListMode()
     {
-        Content = new FilesListViewModel(_location, SetLocation);
+        ViewMode = FilesViewMode.CreateList();
     }
 
     public void SelectIconsMode()
     {
-        Content = new FilesIconsViewModel();
+        ViewMode = FilesViewMode.CreateIcons();
     }
 
     public void NavigateUp()
@@ -56,11 +73,12 @@ public class FilesViewModel : ViewModelBase
     private void SetLocation(string location)
     {
         _location = location;
-        LocationParts = location.Split(Path.DirectorySeparatorChar).Where(x => !string.IsNullOrEmpty(x)).ToArray();
+        LocationParts = _location.Split(Path.DirectorySeparatorChar).Where(x => !string.IsNullOrEmpty(x)).ToArray();
 
-        string? parent = GetParentLocation(location);
+        string? parent = GetParentLocation(_location);
         CanNavigateUp = parent != null;
-        SelectListMode(); // TODO: Select current mode
+
+        LoadNodes(_location);
     }
 
     private string? GetParentLocation(string location)
@@ -69,10 +87,46 @@ public class FilesViewModel : ViewModelBase
         return parent;
     }
 
+    private void LoadNodes(string location)
+    {
+        Nodes.Clear();
+        SelectedNode = null;
+
+        string[] directories = Directory.GetDirectories(location);
+        string[] files = Directory.GetFiles(location);
+
+        AddNodes(directories, FileNodeType.Directory);
+        AddNodes(files, FileNodeType.File);
+    }
+
+    private void AddNodes(string[] items, FileNodeType type)
+    {
+        foreach (string item in items.OrderBy(x => x))
+        {
+            string name = Path.GetFileName(item);
+            if (name.StartsWith('.'))
+            {
+                continue;
+            }
+
+            FileNode node = new(item, name, type);
+            Nodes.Add(new FileNodeViewModel(node));
+        }
+    }
+
+    private void SelectNode(FileNodeViewModel node)
+    {
+        if (node.Type.IsDirectory)
+        {
+            SetLocation(node.Path);
+        }
+    }
+
+    private FilesViewMode _viewMode;
     private string _location;
     private string[] _locationParts;
     private bool _canNavigateUp;
-    private ViewModelBase _content;
+    private FileNodeViewModel? _selectedNode;
 
     // ScaleUpCommand = ReactiveCommand.Create(() =>
     //     {
