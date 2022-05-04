@@ -1,4 +1,5 @@
 using System.IO;
+using System.Threading.Tasks;
 using Avalonia.Media.Imaging;
 using ReactiveUI;
 using TagFiles.Explorer.Models;
@@ -12,12 +13,6 @@ public class FileNodeViewModel : ViewModelBase
         Path = model.Path;
         Name = model.Name;
         Type = model.Type;
-
-        if (Type.IsFile)
-        {
-            // TODO: move to converter?
-            // LoadPreview();
-        }
     }
 
     public string Path { get; }
@@ -32,7 +27,7 @@ public class FileNodeViewModel : ViewModelBase
         set => this.RaiseAndSetIfChanged(ref _preview, value);
     }
 
-    private async void LoadPreview()
+    public async Task LoadPreview()
     {
         // TODO: Cancel if not required (IDisposable?)
         FilePreviewGenerator previewGenerator = new();

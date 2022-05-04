@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using ReactiveUI;
 using TagFiles.Explorer.Models;
 
@@ -88,7 +89,7 @@ public class FilesViewModel : ViewModelBase
         PreviewSize = Math.Max(PreviewSize - 5, 10);
     }
 
-    private void SetLocation(string location)
+    private async void SetLocation(string location)
     {
         _location = location;
         LocationParts = _location.Split(Path.DirectorySeparatorChar).Where(x => !string.IsNullOrEmpty(x)).ToArray();
@@ -96,7 +97,7 @@ public class FilesViewModel : ViewModelBase
         string? parent = GetParentLocation(_location);
         CanNavigateUp = parent != null;
 
-        LoadNodes(_location);
+        await LoadNodes(_location);
     }
 
     private string? GetParentLocation(string location)
@@ -105,7 +106,7 @@ public class FilesViewModel : ViewModelBase
         return parent;
     }
 
-    private void LoadNodes(string location)
+    private async Task LoadNodes(string location)
     {
         Nodes.Clear();
         SelectedNode = null;
@@ -115,6 +116,7 @@ public class FilesViewModel : ViewModelBase
 
         AddNodes(directories, FileNodeType.Directory);
         AddNodes(files, FileNodeType.File);
+        await LoadPreviews();
     }
 
     private void AddNodes(string[] items, FileNodeType type)
@@ -129,6 +131,14 @@ public class FilesViewModel : ViewModelBase
 
             FileNode node = new(item, name, type);
             Nodes.Add(new FileNodeViewModel(node));
+        }
+    }
+
+    private async Task LoadPreviews()
+    {
+        foreach (FileNodeViewModel node in Nodes.Where(x => x.Type.IsFile))
+        {
+            await node.LoadPreview();
         }
     }
 

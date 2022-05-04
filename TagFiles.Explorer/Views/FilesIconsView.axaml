@@ -15,9 +15,14 @@
                             <Border Background="#252525" CornerRadius="5" ClipToBounds="True">
                                 <Panel Width="{Binding $parent[ItemsControl].DataContext.PreviewSize}"
                                        Height="{Binding $parent[ItemsControl].DataContext.PreviewSize}">
-                                    <Image Stretch="Uniform" Source="{Binding Preview}" />
-                                    <PathIcon Data="{StaticResource FolderIcon}" IsVisible="{Binding Type.IsDirectory}" />
-                                    <PathIcon Data="{StaticResource FileIcon}" IsVisible="{Binding Type.IsFile}" />
+                                    <Panel IsVisible="{Binding Preview, Converter={x:Static ObjectConverters.IsNull}}">
+                                        <PathIcon Data="{StaticResource FolderIcon}"
+                                                  IsVisible="{Binding Type.IsDirectory}" />
+                                        <PathIcon Data="{StaticResource FileIcon}" IsVisible="{Binding Type.IsFile}" />
+                                    </Panel>
+                                    <Image
+                                        IsVisible="{Binding Preview, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                        Stretch="Uniform" Source="{Binding Preview}" />
                                     <!-- <ItemsControl VerticalAlignment="Bottom" Items="{Binding Tags}"> -->
                                     <!--     <ItemsControl.ItemsPanel> -->
                                     <!--         <ItemsPanelTemplate> -->
