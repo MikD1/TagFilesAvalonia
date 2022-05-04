@@ -44,10 +44,10 @@
             </StackPanel>
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button Command="{Binding ScaleDownCommand}">
+                <Button Command="{Binding DecreasePreviewSize}">
                     <PathIcon Data="{StaticResource RemoveIcon}" />
                 </Button>
-                <Button Command="{Binding ScaleUpCommand}">
+                <Button Command="{Binding IncreasePreviewSize}">
                     <PathIcon Data="{StaticResource AddIcon}" />
                 </Button>
             </StackPanel>

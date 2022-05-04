@@ -6,14 +6,15 @@
             <ItemsControl Items="{Binding Nodes}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel />
+                        <WrapPanel HorizontalAlignment="Center" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Margin="10">
                             <Border Background="#252525" CornerRadius="5" ClipToBounds="True">
-                                <Panel>
+                                <Panel Width="{Binding $parent[ItemsControl].DataContext.PreviewSize}"
+                                       Height="{Binding $parent[ItemsControl].DataContext.PreviewSize}">
                                     <Image Stretch="Uniform" Source="{Binding Preview}" />
                                     <PathIcon Data="{StaticResource FolderIcon}" IsVisible="{Binding Type.IsDirectory}" />
                                     <PathIcon Data="{StaticResource FileIcon}" IsVisible="{Binding Type.IsFile}" />

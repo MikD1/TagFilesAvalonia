@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -13,6 +14,7 @@ public class FilesViewModel : ViewModelBase
         _viewMode = FilesViewMode.CreateList();
         _location = default!;
         _locationParts = default!;
+        _previewSize = 100;
         Nodes = new();
 
         SetLocation(location);
@@ -51,6 +53,12 @@ public class FilesViewModel : ViewModelBase
         private set => this.RaiseAndSetIfChanged(ref _canNavigateUp, value);
     }
 
+    public int PreviewSize
+    {
+        get => _previewSize;
+        private set => this.RaiseAndSetIfChanged(ref _previewSize, value);
+    }
+
     public void SelectListMode()
     {
         ViewMode = FilesViewMode.CreateList();
@@ -68,6 +76,16 @@ public class FilesViewModel : ViewModelBase
         {
             SetLocation(parent);
         }
+    }
+
+    public void IncreasePreviewSize()
+    {
+        PreviewSize = Math.Min(PreviewSize + 5, 150);
+    }
+
+    public void DecreasePreviewSize()
+    {
+        PreviewSize = Math.Max(PreviewSize - 5, 10);
     }
 
     private void SetLocation(string location)
@@ -126,26 +144,6 @@ public class FilesViewModel : ViewModelBase
     private string _location;
     private string[] _locationParts;
     private bool _canNavigateUp;
+    private int _previewSize;
     private FileNodeViewModel? _selectedNode;
-
-    // ScaleUpCommand = ReactiveCommand.Create(() =>
-    //     {
-    //         int value = FilesInLine - 1;
-    //         if (value < 1)
-    //         {
-    //             value = 1;
-    //         }
-    //
-    //         FilesInLine = value;
-    //     });
-    // ScaleDownCommand = ReactiveCommand.Create(() =>
-    // {
-    //     int value = FilesInLine + 1;
-    //     if (value > 12)
-    //     {
-    //         value = 12;
-    //     }
-    //
-    //     FilesInLine = value;
-    // });
 }

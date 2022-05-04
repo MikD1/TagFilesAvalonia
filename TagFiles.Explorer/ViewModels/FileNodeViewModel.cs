@@ -15,6 +15,7 @@ public class FileNodeViewModel : ViewModelBase
 
         if (Type.IsFile)
         {
+            // TODO: move to converter?
             // LoadPreview();
         }
     }
